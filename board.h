@@ -1,9 +1,11 @@
 #include <fstream>
-
+#include <iostream>
+#include <vector>
 #include "page.h"
 
-using std::endl;
-using std::ofstream;
+
+using namespace std;
+vector<Page> idpage;
 
 
 class Board {
@@ -40,7 +42,6 @@ Board::Board(int num_jobs, int width, int height, ofstream& output_stream) : out
             board[h * width + w] = ' ';
         }
     }
-
 }
 
 Board::~Board() {
@@ -66,7 +67,6 @@ void Board::print_board(int x, int y) {
 }
 
 void Board::print_job(int job_idx, char job_type, int id) {
-
     output << ">> (" << job_idx << ") ";
     switch (job_type) {
 
@@ -87,16 +87,33 @@ void Board::print_job(int job_idx, char job_type, int id) {
 
 void Board::insert_page(int x, int y, int page_width, int page_height, int id, char content)//insert_page(0,1,10,15,c)
 {
-
     for (int h = y; h < y + page_height; h++) {
         for (int w = x; w < x + page_width; w++) {
             board[h * width + w] = content;
         }
     }
+    Page pg(x, y, page_width, page_height, id, content);
+    idpage.push_back(pg);
     print_board(x, y);
 }
 
-void Board::delete_page(int id) {
+void Board::delete_page(int id)
+{
+
+    for (int i = 0; i < idpage.size(); i++)
+    {
+        if (id == idpage[i].get_Page_id())
+        {
+            for (int j = idpage[i].get_Page_y(); j < idpage[i].get_Page_y() + idpage[i].get_Page_height(); j++)
+            {
+                for (int k = idpage[i].get_Page_x(); k < idpage[i].get_Page_x() + idpage[i].get_Page_width(); k++)
+                {
+                    board[j * width + k] = ' ';
+                }
+            }
+            print_board(idpage[i].get_Page_x(), idpage[i].get_Page_y());
+        }
+    }
 
 }
 
@@ -109,4 +126,4 @@ void Board::modify_position(int id, int x, int y) {
 
 
 }
-// github 연동 체크 중
+

@@ -1,13 +1,11 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-
 #include "board.h"
 
 using namespace std;
 
 void manage_board1() {
-
 
     int width, height;
     int num_jobs;
@@ -37,20 +35,22 @@ void manage_board1() {
     int page_x, page_y, page_width, page_height, page_id;
     char page_content;
 
-    for (int job_idx = 1; job_idx <= 4; job_idx++) {
+    for (int job_idx = 1; job_idx <= 7; job_idx++) {
         input >> job_type;
         switch (job_type) {
         case 'i':
             //insert page
             input >> page_id >> page_x >> page_y >> page_width >> page_height >> page_content;//id=8, x=0 y=1 width =10 height = 15 content =c
+            //Page pgs=Page(page_x, page_y, page_width, page_height, job_idx, page_content);
             board.print_job(job_idx, job_type, page_id); //1,i,8
-            board.insert_page(page_x, page_y, page_width, page_height, page_id, page_content);      //insert_page(0,1,10,15,c)
+            board.insert_page(page_x, page_y, page_width, page_height, page_id, page_content);  //insert_page(0,1,10,15,c)
             break;
         case 'd':
             //delete page
             input >> page_id;
             board.print_job(job_idx, job_type, page_id);
             board.delete_page(page_id);
+            output << "delete" << endl;
             break;
         case 'm':
             //modify page
@@ -87,11 +87,9 @@ void manage_board1() {
 
 
 int main(int argc, char* argv[]) {
-
-    manage_board1();
     //if (argc==3) manage_board(string(argv[1]), string(argv[2]));
-    // else cerr << "Wrong arguments" << endl;
-
+    //else cerr << "Wrong arguments" << endl;
+    manage_board1();
 
     return 0;
 
