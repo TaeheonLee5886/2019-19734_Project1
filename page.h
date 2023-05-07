@@ -7,6 +7,7 @@ class Page {
         int get_Page_y() { return y; }
         int get_Page_width() { return width; }
         int get_Page_height() { return height; }
+        char get_Page_content() { return content; }
 
 
     private:

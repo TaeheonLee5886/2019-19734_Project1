@@ -29,9 +29,6 @@ void manage_board1() {
     }
 
     Board board = Board(num_jobs, width, height, output); //board.num_jobs=1, width=50, height=20;ofstream& output=output;
-
-
-
     int page_x, page_y, page_width, page_height, page_id;
     char page_content;
 
@@ -43,14 +40,13 @@ void manage_board1() {
             input >> page_id >> page_x >> page_y >> page_width >> page_height >> page_content;//id=8, x=0 y=1 width =10 height = 15 content =c
             //Page pgs=Page(page_x, page_y, page_width, page_height, job_idx, page_content);
             board.print_job(job_idx, job_type, page_id); //1,i,8
-            board.insert_page(page_x, page_y, page_width, page_height, page_id, page_content);  //insert_page(0,1,10,15,c)
+            board.insert_page(page_x, page_y, page_width, page_height, page_id, page_content, job_idx);  //insert_page(0,1,10,15,c)
             break;
         case 'd':
             //delete page
             input >> page_id;
             board.print_job(job_idx, job_type, page_id);
-            board.delete_page(page_id);
-            output << "delete" << endl;
+            board.delete_page(page_id, job_idx);
             break;
         case 'm':
             //modify page
