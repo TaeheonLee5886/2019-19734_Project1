@@ -1,4 +1,4 @@
-using namespace std;
+
 class Page {
     public:
         Page(int page_x, int page_y, int page_width, int page_height, int page_id, char page_content);
@@ -8,6 +8,8 @@ class Page {
         int get_Page_width() { return width; }
         int get_Page_height() { return height; }
         char get_Page_content() { return content; }
+        void set_Page_content(char content_to_change) { content = content_to_change; }
+        friend class board;
 
 
     private:

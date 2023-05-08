@@ -20,9 +20,10 @@ public:
     void print_board();
     void print_job(int job_idx, char job_type, int id);
     void delete_pages(int idx);
+    void delete_page_for_modify_content(int idx);
     //job functions
     void insert_page(int x, int y, int width, int height, int id, char content, int job_index);
-    void delete_page(int id, int job_index);
+    void delete_page(int id);
     void modify_content(int id, char content);
     void modify_position(int id, int x, int y);
     friend class page;
@@ -113,8 +114,9 @@ void Board::insert_page(int x, int y, int page_width, int page_height, int id, c
 
 void Board::delete_pages(int idx)
 {
-
-    if (idpage.size() == 0)
+    vector<Page>idpage_copy;
+    idpage_copy = idpage;
+    if (idpage_copy.size() == 0)
         return;
 
     for (int h = 0; h < height; h++) {
@@ -123,35 +125,35 @@ void Board::delete_pages(int idx)
         }
     }
 
-    int _x = idpage[idx].get_Page_x();
-    int _y = idpage[idx].get_Page_y();
-    int _width = idpage[idx].get_Page_width();
-    int _height = idpage[idx].get_Page_height();
+    int _x = idpage_copy[idx].get_Page_x();
+    int _y = idpage_copy[idx].get_Page_y();
+    int _width = idpage_copy[idx].get_Page_width();
+    int _height = idpage_copy[idx].get_Page_height();
 
     int idx2 = 0;
     int min_id = 999999;
     bool flag = true;
-    while (flag) 
+    while (flag)
     {
         min_id = 999999;
         flag = false;
-        for (int i = idpage.size() - 1; i > idx; i--)
-            if (((_x <= idpage[i].get_Page_x()  && idpage[i].get_Page_x() <= _x + _width)
-                && (_y <= idpage[i].get_Page_y()  && idpage[i].get_Page_y() <= _y + _height)) ||
-                (idpage[i].get_Page_x() <= _x && _x <= idpage[i].get_Page_x() + idpage[i].get_Page_width())
-                && ( idpage[i].get_Page_y() <= _y && _y <= idpage[i].get_Page_y() + idpage[i].get_Page_height())) //°ãÄ¥ ¶§
+        for (int i = idpage_copy.size() - 1; i > idx; i--)
+            if (((_x <= idpage_copy[i].get_Page_x() && idpage_copy[i].get_Page_x() <= _x + _width)
+                && (_y <= idpage_copy[i].get_Page_y() && idpage_copy[i].get_Page_y() <= _y + _height)) ||
+                (idpage_copy[i].get_Page_x() <= _x && _x <= idpage_copy[i].get_Page_x() + idpage_copy[i].get_Page_width())
+                && (idpage_copy[i].get_Page_y() <= _y && _y <= idpage_copy[i].get_Page_y() + idpage_copy[i].get_Page_height())) //°ãÄ¥ ¶§
             {
                 auto it = find(idxvector.begin(), idxvector.end(), i);
                 if (it != idxvector.end())
                     continue;
-                if (min_id > idpage[i].get_Page_id()) 
+                if (min_id > idpage_copy[i].get_Page_id())
                 {
                     idx2 = i;
-                    min_id = idpage[i].get_Page_id();
+                    min_id = idpage_copy[i].get_Page_id();
                     flag = true;
                 }
             }
-        if (flag) 
+        if (flag)
         {
             delete_pages(idx2);
             idxvector.push_back(idx2);
@@ -160,16 +162,18 @@ void Board::delete_pages(int idx)
     }
 
 
-    for (int i = 0; i < idpage.size(); i++)
+    for (int i = 0; i < idpage_copy.size(); i++)
     {
-        auto it = find(idxvector.begin(), idxvector.end(), i); 
-        
+        auto it = find(idxvector.begin(), idxvector.end(), i);
+
         if (it != idxvector.end())
             continue;
 
-        for (int h = idpage[i].get_Page_y(); h < idpage[i].get_Page_y() + idpage[i].get_Page_height(); h++) {
-            for (int w = idpage[i].get_Page_x(); w < idpage[i].get_Page_x() + idpage[i].get_Page_width(); w++) {
-                board[h * width + w] = idpage[i].get_Page_content();
+        for (int h = idpage_copy[i].get_Page_y(); h < idpage_copy[i].get_Page_y() + idpage_copy[i].get_Page_height(); h++)
+        {
+            for (int w = idpage_copy[i].get_Page_x(); w < idpage_copy[i].get_Page_x() + idpage_copy[i].get_Page_width(); w++)
+            {
+                board[h * width + w] = idpage_copy[i].get_Page_content();
             }
         }
     }
@@ -181,31 +185,34 @@ void Board::delete_pages(int idx)
         }
     }
 
+
 }
 
 
-void Board::delete_page(int id, int job_index)
+void Board::delete_page(int id)
 {
+    vector<Page> idpage_copy;
+    idpage_copy = idpage;
     int pop=0;
-    for (int i = 0; i < idpage.size(); i++) {
-        if (id == idpage[i].get_Page_id()) {
+    for (int i = 0; i < idpage_copy.size(); i++) {
+        if (id == idpage_copy[i].get_Page_id()) {
             pop = i;
 
             break;
         }
     }
-    for (int i = 0; i < idpage.size(); i++) {
-        if (id == idpage[i].get_Page_id()) {
+    for (int i = 0; i < idpage_copy.size(); i++) {
+        if (id == idpage_copy[i].get_Page_id()) {
             delete_pages(i);
 
             break;
         }
     }
-    print_board();
+    print_board();// Áö¿öÁü
     sort(idxvector.begin(), idxvector.end());
     for (int i = idxvector.size() - 1; i >= 0; i--) 
     {
-        idpage.erase(idpage.begin() + idxvector[i]);
+        idpage_copy.erase(idpage_copy.begin() + idxvector[i]);
         idxvector.pop_back();
     }
     int order_num = order.size()-1;
@@ -222,24 +229,11 @@ void Board::delete_page(int id, int job_index)
         print_board();
         order_num--;
     }
-    for (int k =0 ; k < 0; k++)
+ 
+    for (int l = 0; l < order.size(); l++)
     {
-         for (int h = idpage_for_print[k].get_Page_y(); h < idpage_for_print[k].get_Page_y() + idpage_for_print[k].get_Page_height(); h++) 
-         {
-                for (int w = idpage_for_print[k].get_Page_x(); w < idpage_for_print[k].get_Page_x() + idpage_for_print[k].get_Page_width(); w++) 
-                {
-                    board[h * width + w] = idpage_for_print[k].get_Page_content();
-                }
-         }
-        
-        print_board();
-        for (int h = 0; h < height; h++) {
-            for (int w = 0; w < width; w++) {
-                board[h * width + w] = ' ';
-            }
-        }
+        order.erase(order.begin() + l);
     }
-  
     return;
 
 }
@@ -248,8 +242,134 @@ void Board::delete_page(int id, int job_index)
 void Board::modify_content(int id, char content)
 {
 
+    vector<Page> id_m;
+    id_m = idpage;
+    int pop = 0;
+    for (int i = 0; i < idpage.size(); i++) {
+        if (id == idpage[i].get_Page_id()) {
+            pop = i;
+
+            break;
+        }
+    }
+    for (int i = 0; i < idpage.size(); i++) {
+        if (id == idpage[i].get_Page_id()) {
+            delete_pages(i);
+
+            break;
+        }
+    }
+
+    print_board(); //Áö¿öÁü
+ 
+    idpage[pop].set_Page_content(content);
+    idpage_for_print[pop].set_Page_content(content);
+    sort(idxvector.begin(), idxvector.end());
+    for (int i = idxvector.size() - 1; i >= 0; i--)
+    {
+        id_m.erase(id_m.begin() + idxvector[i]);
+        idxvector.pop_back();
+    }
+    
+    for (int h = idpage[pop].get_Page_y(); h < idpage[pop].get_Page_y() + idpage[pop].get_Page_height(); h++)
+    {
+        for (int w = idpage[pop].get_Page_x(); w < idpage[pop].get_Page_x() + idpage[pop].get_Page_width(); w++)
+        {
+            board[h * width + w] = idpage[pop].get_Page_content();
+        }
+    }
+    print_board();
+    int order_num = order.size() - 1;
+    while (order_num >= 0)
+    {
+        for (int h = idpage[order[order_num]].get_Page_y(); h < idpage[order[order_num]].get_Page_y() + idpage[order[order_num]].get_Page_height(); h++)
+        {
+            for (int w = idpage[order[order_num]].get_Page_x(); w < idpage[order[order_num]].get_Page_x() + idpage[order[order_num]].get_Page_width(); w++)
+            {
+                board[h * width + w] = idpage[order[order_num]].get_Page_content();
+            }
+        }
+
+        print_board();
+        order_num--;
+    }
+
+
+    for (int l = 0; l < order.size(); l++)
+    {
+        order.erase(order.begin() + l);
+    }
+    return;
+}
+void Board::delete_page_for_modify_content(int idx)
+{
+    vector<Page>idpage_copy;
+    idpage_copy = idpage;
+    if (idpage_copy.size() == 0)
+        return;
+
+    for (int h = 0; h < height; h++) {
+        for (int w = 0; w < width; w++) {
+            board[h * width + w] = ' ';
+        }
+    }
+
+    int _x = idpage_copy[idx].get_Page_x();
+    int _y = idpage_copy[idx].get_Page_y();
+    int _width = idpage_copy[idx].get_Page_width();
+    int _height = idpage_copy[idx].get_Page_height();
+
+    int idx2 = 0;
+    int min_id = 999999;
+    bool flag = true;
+    while (flag)
+    {
+        min_id = 999999;
+        flag = false;
+        for (int i = idpage_copy.size() - 1; i > idx; i--)
+            if (((_x <= idpage_copy[i].get_Page_x() && idpage_copy[i].get_Page_x() <= _x + _width)
+                && (_y <= idpage_copy[i].get_Page_y() && idpage_copy[i].get_Page_y() <= _y + _height)) ||
+                (idpage_copy[i].get_Page_x() <= _x && _x <= idpage_copy[i].get_Page_x() + idpage_copy[i].get_Page_width())
+                && (idpage_copy[i].get_Page_y() <= _y && _y <= idpage_copy[i].get_Page_y() + idpage_copy[i].get_Page_height())) //°ãÄ¥ ¶§
+            {
+                auto it = find(idxvector.begin(), idxvector.end(), i);
+                if (it != idxvector.end())
+                    continue;
+                if (min_id > idpage_copy[i].get_Page_id())
+                {
+                    idx2 = i;
+                    min_id = idpage_copy[i].get_Page_id();
+                    flag = true;
+                }
+            }
+        if (flag)
+        {
+            delete_pages(idx2);
+            idxvector.push_back(idx2);
+            order.push_back(idx2);
+        }
+    }
+
+
+    for (int i = 0; i < idpage_copy.size(); i++)
+    {
+        auto it = find(idxvector.begin(), idxvector.end(), i);
+
+        if (it != idxvector.end())
+            continue;
+
+        for (int h = idpage_copy[i].get_Page_y(); h < idpage_copy[i].get_Page_y() + idpage_copy[i].get_Page_height(); h++)
+        {
+            for (int w = idpage_copy[i].get_Page_x(); w < idpage_copy[i].get_Page_x() + idpage_copy[i].get_Page_width(); w++)
+            {
+                board[h * width + w] = idpage_copy[i].get_Page_content();
+            }
+        }
+    }
+    print_board();
 
 }
+
 void Board::modify_position(int id, int x, int y) {
 
 
