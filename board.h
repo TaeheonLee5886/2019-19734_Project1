@@ -254,7 +254,7 @@ void Board::modify_content(int id, char content)
     }
     for (int i = 0; i < idpage.size(); i++) {
         if (id == idpage[i].get_Page_id()) {
-            delete_pages(i);
+            delete_page_for_modify_content(i);
 
             break;
         }
