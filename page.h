@@ -9,6 +9,9 @@ class Page {
         int get_Page_height() { return height; }
         char get_Page_content() { return content; }
         void set_Page_content(char content_to_change) { content = content_to_change; }
+        void set_Page_x(int page_x) { x = page_x; }
+        void set_Page_y(int page_y) { y = page_y; }
+        
         friend class board;
 
 

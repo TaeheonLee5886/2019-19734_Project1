@@ -13,7 +13,7 @@ void manage_board1() {
     ifstream input;
     ofstream output;
 
-    input.open("input_0.txt");
+    input.open("input_2.txt");
 
     if (!(input.is_open())) {
         cout << "Input missing" << endl;
@@ -21,7 +21,7 @@ void manage_board1() {
     }
 
     input >> width >> height >> num_jobs;
-    output.open("outputt.txt", ofstream::trunc);
+    output.open("output_2.txt", ofstream::trunc);
 
     if (!(output.is_open())) {
         cout << "Output missing" << endl;
@@ -32,7 +32,7 @@ void manage_board1() {
     int page_x, page_y, page_width, page_height, page_id;
     char page_content;
 
-    for (int job_idx = 1; job_idx <= 7; job_idx++) {
+    for (int job_idx = 1; job_idx <= num_jobs; job_idx++) {
         input >> job_type;
         switch (job_type) {
         case 'i':
@@ -41,7 +41,7 @@ void manage_board1() {
             //Page pgs=Page(page_x, page_y, page_width, page_height, job_idx, page_content);
             
             board.print_job(job_idx, job_type, page_id); //1,i,8
-            board.insert_page(page_x, page_y, page_width, page_height, page_id, page_content, job_idx);  //insert_page(0,1,10,15,c)
+            board.insert_page(page_x, page_y, page_width, page_height, page_id, page_content);  //insert_page(0,1,10,15,c)
             
             break;
         case 'd':
