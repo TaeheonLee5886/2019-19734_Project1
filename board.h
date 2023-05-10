@@ -226,7 +226,27 @@ void Board::delete_page(int id)
 
 void Board::modify_content(int id, char content)
 {
-  
+    for (int i = 0; i < idpage.size(); i++) {
+        if (id == idpage[i].get_Page_id()) {
+            delete_pages(i);
+
+            break;
+        }
+    }
+    sort(idxvector.begin(), idxvector.end());
+    for (int i = idxvector.size() - 1; i >= 0; i--)
+    {
+        idpage.erase(idpage.begin() + idxvector[i]);
+        idxvector.pop_back();
+    }
+    idpage_storage[idpage_storage.size() - 1].set_Page_content(content);
+    for (int i = idpage_storage.size() - 1; i >= 0; i--)
+    {
+        insert_page(idpage_storage[i].get_Page_x(), idpage_storage[i].get_Page_y(), idpage_storage[i].get_Page_width(), idpage_storage[i].get_Page_height(), idpage_storage[i].get_Page_id(), idpage_storage[i].get_Page_content());
+        idpage_storage.pop_back();
+    }
+
+    return;
 }
 
 
