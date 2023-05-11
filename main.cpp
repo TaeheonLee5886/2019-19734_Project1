@@ -5,7 +5,7 @@
 
 using namespace std;
 
-void manage_board1() {
+void manage_board1(string input_file, string output_file) {
 
     int width, height;
     int num_jobs;
@@ -13,7 +13,7 @@ void manage_board1() {
     ifstream input;
     ofstream output;
 
-    input.open("input_3.txt");
+    input.open(input_file);
 
     if (!(input.is_open())) {
         cout << "Input missing" << endl;
@@ -21,7 +21,7 @@ void manage_board1() {
     }
 
     input >> width >> height >> num_jobs;
-    output.open("output_3.txt", ofstream::trunc);
+    output.open(output_file, ofstream::trunc);
 
     if (!(output.is_open())) {
         cout << "Output missing" << endl;
@@ -85,9 +85,9 @@ void manage_board1() {
 
 
 int main(int argc, char* argv[]) {
-    //if (argc==3) manage_board(string(argv[1]), string(argv[2]));
-    //else cerr << "Wrong arguments" << endl;
-    manage_board1();
+    if (argc==3) manage_board1(string(argv[1]), string(argv[2]));
+    else cerr << "Wrong arguments" << endl;
+    
 
     return 0;
 

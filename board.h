@@ -10,7 +10,7 @@ vector<Page> idpage;
 vector<Page> idpage_for_print;
 vector<int> order;
 vector<int> idxvector;
-vector<Page> idpage_storage;//
+vector<Page> idpage_storage;
 
 bool checking_func(int x1, int y1, int height1, int width1, int x2, int y2, int height2, int width2);
 
