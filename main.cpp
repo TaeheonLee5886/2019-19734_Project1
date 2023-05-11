@@ -28,7 +28,7 @@ void manage_board1(string input_file, string output_file) {
         return;
     }
 
-    Board board = Board(num_jobs, width, height, output); //board.num_jobs=1, width=50, height=20;ofstream& output=output;
+    Board board = Board(num_jobs, width, height, output);
     int page_x, page_y, page_width, page_height, page_id;
     char page_content;
 
@@ -37,11 +37,10 @@ void manage_board1(string input_file, string output_file) {
         switch (job_type) {
         case 'i':
             //insert page
-            input >> page_id >> page_x >> page_y >> page_width >> page_height >> page_content;//id=8, x=0 y=1 width =10 height = 15 content =c
-            //Page pgs=Page(page_x, page_y, page_width, page_height, job_idx, page_content);
+            input >> page_id >> page_x >> page_y >> page_width >> page_height >> page_content;
             
-            board.print_job(job_idx, job_type, page_id); //1,i,8
-            board.insert_page(page_x, page_y, page_width, page_height, page_id, page_content);  //insert_page(0,1,10,15,c)
+            board.print_job(job_idx, job_type, page_id); 
+            board.insert_page(page_x, page_y, page_width, page_height, page_id, page_content);  
             
             break;
         case 'd':
