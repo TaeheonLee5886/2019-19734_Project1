@@ -13,7 +13,7 @@ void manage_board1() {
     ifstream input;
     ofstream output;
 
-    input.open("input_2.txt");
+    input.open("input_3.txt");
 
     if (!(input.is_open())) {
         cout << "Input missing" << endl;
@@ -21,7 +21,7 @@ void manage_board1() {
     }
 
     input >> width >> height >> num_jobs;
-    output.open("output_2.txt", ofstream::trunc);
+    output.open("output_3.txt", ofstream::trunc);
 
     if (!(output.is_open())) {
         cout << "Output missing" << endl;

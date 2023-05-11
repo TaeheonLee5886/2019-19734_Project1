@@ -252,13 +252,34 @@ void Board::modify_content(int id, char content)
 
 void Board::modify_position(int id, int x, int y) 
 {
+    for (int i = 0; i < idpage.size(); i++) {
+        if (id == idpage[i].get_Page_id()) {
+            delete_pages(i);
 
+            break;
+        }
+    }
+    sort(idxvector.begin(), idxvector.end());
+    for (int i = idxvector.size() - 1; i >= 0; i--)
+    {
+        idpage.erase(idpage.begin() + idxvector[i]);
+        idxvector.pop_back();
+    }
+    idpage_storage[idpage_storage.size() - 1].set_Page_x(x);
+    idpage_storage[idpage_storage.size() - 1].set_Page_y(y);
+    for (int i = idpage_storage.size() - 1; i >= 0; i--)
+    {
+        insert_page(idpage_storage[i].get_Page_x(), idpage_storage[i].get_Page_y(), idpage_storage[i].get_Page_width(), idpage_storage[i].get_Page_height(), idpage_storage[i].get_Page_id(), idpage_storage[i].get_Page_content());
+        idpage_storage.pop_back();
+    }
+
+    return;
    
 
 }
 bool checking_func(int x1, int y1, int h1, int w1, int x2, int y2, int h2, int w2)
 {
-    return true;
+    
     for (int k = x1; k < x1 + w1; k++)
     {
         for (int m = y1; m < y1 + h1; m++)
